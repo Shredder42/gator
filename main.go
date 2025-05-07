@@ -1,11 +1,15 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/Shredder42/gator/internal/config"
+	"github.com/Shredder42/gator/internal/database"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -15,7 +19,15 @@ func main() {
 		log.Fatalf("error reading config: %v", err)
 	}
 
+	db, err := sql.Open("postgres", cfg.DbUrl)
+	if err != nil {
+		log.Fatalf("error connecting to db: %v", err)
+	}
+	defer db.Close()
+	dbQueries := database.New(db)
+
 	programState := &state{
+		db:     dbQueries,
 		config: &cfg,
 	}
 
@@ -24,6 +36,7 @@ func main() {
 	}
 
 	allCommands.register("login", handlerLogin)
+	allCommands.register("register", handlerRegister)
 
 	args := os.Args
 	if len(args) < 2 {
@@ -43,5 +56,6 @@ func main() {
 }
 
 type state struct {
+	db     *database.Queries
 	config *config.Config
 }
