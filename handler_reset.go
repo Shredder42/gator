@@ -7,7 +7,7 @@ import (
 
 func handlerReset(s *state, cmd command) error {
 	if len(cmd.arguments) != 0 {
-		return fmt.Errorf("reset does not require username")
+		return fmt.Errorf("command reset does not require username")
 	}
 
 	err := s.db.DeleteUsers(context.Background())
