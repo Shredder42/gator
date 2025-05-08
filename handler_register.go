@@ -17,13 +17,6 @@ func handlerRegister(s *state, cmd command) error {
 
 	registerName := cmd.arguments[0]
 
-	userName, err := s.db.GetUser(context.Background(), registerName)
-	if err == nil {
-		if userName != "" {
-			log.Fatalf("username %s already exists", registerName)
-		}
-	}
-
 	userInfo, err := s.db.CreateUser(context.Background(), database.CreateUserParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
@@ -31,7 +24,7 @@ func handlerRegister(s *state, cmd command) error {
 		Name:      registerName,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("couldn't create user: %w", err)
 	}
 
 	err = s.config.SetUser(registerName)
