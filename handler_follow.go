@@ -9,15 +9,9 @@ import (
 	"github.com/google/uuid"
 )
 
-func handlerFollow(s *state, cmd command) error {
+func handlerFollow(s *state, cmd command, user database.User) error {
 	if len(cmd.arguments) != 1 {
 		return fmt.Errorf("command follow requires url only")
-	}
-
-	currentUser := s.config.CurrentUserName
-	user, err := s.db.GetUser(context.Background(), currentUser)
-	if err != nil {
-		return fmt.Errorf("error getting user: %w", err)
 	}
 
 	url := cmd.arguments[0]

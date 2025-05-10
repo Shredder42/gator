@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
@@ -40,10 +41,10 @@ func main() {
 	allCommands.register("reset", handlerReset)
 	allCommands.register("users", handlerUsers)
 	allCommands.register("agg", handlerAgg)
-	allCommands.register("addfeed", handlerAddFeed)
+	allCommands.register("addfeed", middlewareLoggedIn(handlerAddFeed))
 	allCommands.register("feeds", handlerFeeds)
-	allCommands.register("follow", handlerFollow)
-	allCommands.register("following", handlerFollowing)
+	allCommands.register("follow", middlewareLoggedIn(handlerFollow))
+	allCommands.register("following", middlewareLoggedIn(handlerFollowing))
 
 	args := os.Args
 	if len(args) < 2 {
@@ -60,9 +61,26 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 }
 
 type state struct {
 	db     *database.Queries
 	config *config.Config
+}
+
+func middlewareLoggedIn(handler func(s *state, cmd command, user database.User) error) func(*state, command) error {
+	return func(s *state, cmd command) error {
+		currentUserName := s.config.CurrentUserName
+		user, err := s.db.GetUser(context.Background(), currentUserName)
+		if err != nil {
+			log.Fatalf("user not found %s", currentUserName)
+		}
+
+		handler(s, cmd, user)
+
+		return nil
+
+	}
+
 }
