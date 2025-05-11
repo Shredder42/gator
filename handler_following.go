@@ -18,12 +18,12 @@ func handlerFollowing(s *state, cmd command, user database.User) error {
 	}
 
 	if len(feedFollows) == 0 {
-		fmt.Println("No feed follows found for this user.")
-	}
-
-	fmt.Printf("User %s is following:\n", user.Name)
-	for _, follow := range feedFollows {
-		fmt.Println("* ", follow.FeedName)
+		fmt.Printf("No feed follows found for user %s", user.Name)
+	} else {
+		fmt.Printf("User %s is following:\n", user.Name)
+		for _, follow := range feedFollows {
+			fmt.Println("* ", follow.FeedName)
+		}
 	}
 
 	return nil
