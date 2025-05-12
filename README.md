@@ -6,23 +6,40 @@ Users can add and follow as many feeds as they like. **gator** then collects and
 
 **gator** requires Postgres and Go
 
+## Install
 
-**gator** can be installed as a CLI command using `go install`
+**gator** can be installed as a CLI command using 
 
-The available commands for GATOR are listed below:
+```bash 
+go install ...
+```
+
+## Config
+
+Create a `.gatorconfig.json` file in your home directory with the following structure:
+
+```json
+{
+  "db_url": "postgres://username:@localhost:5432/database?sslmode=disable"
+}
+```
+
+Replace the values with your database connection string.
+
+## Using **gator**
 ### Users
-- register [username]: register a new user
-- login [username]: login a registered user
-- users: view currently registered users
+- gator register [username]: register a new user
+- gator login [username]: login a registered user
+- gator users: view currently registered users
 
 ### Feeds
-- addfeed [title] [url]: add a new feed to the database (active user automatically follows added feed)
-- feeds: display feeds in the database
-- follow [url]: follow an existing feed in the database
-- unfollow [url]: unfollow a feed
-- following: view currently followed feeds
-- agg [time]: collect posts from the internet and store them in the database
-- browse [x *optional*]: preview x most recent feeds in command line
+- gator addfeed [title] [url]: add a new feed to the database (active user automatically follows added feed)
+- gator feeds: display feeds in the database
+- gator follow [url]: follow an existing feed in the database
+- gator unfollow [url]: unfollow a feed
+- gator following: view currently followed feeds
+- gator agg [time]: collect posts from the internet and store them in the database
+- gator browse [x *optional*]: preview x most recent feeds in command line
 
 ### Database
 - reset: clears all users, feeds, and posts from the database
