@@ -69,7 +69,7 @@ func scrapeFeeds(s *state) error {
 			FeedID:      feed.ID,
 		})
 		if err != nil {
-			if strings.Contains(err.Error(), "dupliate key value violates unique constraint") {
+			if strings.Contains(err.Error(), "duplicate key value violates unique constraint") {
 				continue
 			}
 			log.Printf("error creating post: %v", err)

@@ -13,7 +13,7 @@ Make sure you have the latest [Go toolchain](https://golang.org/dl/) installed a
 **gator** can be installed as a CLI command using 
 
 ```bash 
-go install ...
+go install github.com/Shredder42/gator@latest
 ```
 
 ## Config
