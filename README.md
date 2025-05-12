@@ -1,13 +1,13 @@
-# *GATOR*
+# **gator**
 
-*GATOR* is a Blog Aggregator that allows users to follow their favorite RSS feeds!
+**gator** is a Blog Aggregator that allows users to follow their favorite RSS feeds!
 
-Users can add and follow as many feeds as they like. *GATOR* then collects and stores posts from these feed in a PostgreSQL database. Users are then able to view summaries in the command line and access the full post via the provided URL. 
+Users can add and follow as many feeds as they like. **gator** then collects and stores posts from these feed in a PostgreSQL database. Users are then able to view summaries in the command line and access the full post via the provided URL. 
 
-*GATOR* requires Postgres and Go
+**gator** requires Postgres and Go
 
 
-*GATOR* can be installed as a CLI command using `go install`
+**gator** can be installed as a CLI command using `go install`
 
 The available commands for GATOR are listed below:
 ### Users
@@ -26,3 +26,5 @@ The available commands for GATOR are listed below:
 
 ### Database
 - reset: clears all users, feeds, and posts from the database
+
+
