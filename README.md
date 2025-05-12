@@ -22,7 +22,7 @@ The available commands for GATOR are listed below:
 - unfollow [url]: unfollow a feed
 - following: view currently followed feeds
 - agg [time]: collect posts from the internet and store them in the database
-- browse [x <optional>]: preview x most recent feeds in command line
+- browse [x *optional*]: preview x most recent feeds in command line
 
 ### Database
 - reset: clears all users, feeds, and posts from the database
