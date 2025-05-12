@@ -4,9 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
+	"strings"
 	"time"
 
 	"github.com/Shredder42/gator/internal/database"
+	"github.com/google/uuid"
 )
 
 func handlerAgg(s *state, cmd command) error {
@@ -50,9 +53,29 @@ func scrapeFeeds(s *state) error {
 		return fmt.Errorf("error fetching feed: %w", err)
 	}
 
-	fmt.Println(rssFeed.Channel.Title)
+	fmt.Printf("Adding posts for %v\n", rssFeed.Channel.Title)
 	for _, item := range rssFeed.Channel.Item {
-		fmt.Println(item.Title)
+
+		pubTime := parseTimeString(item.PubDate)
+
+		_, err := s.db.CreatePost(context.Background(), database.CreatePostParams{
+			ID:          uuid.New(),
+			CreatedAt:   time.Now().UTC(),
+			UpdatedAt:   time.Now().UTC(),
+			Title:       item.Title,
+			Url:         item.Link,
+			Description: item.Description,
+			PublishedAt: pubTime,
+			FeedID:      feed.ID,
+		})
+		if err != nil {
+			if strings.Contains(err.Error(), "dupliate key value violates unique constraint") {
+				continue
+			}
+			log.Printf("error creating post: %v", err)
+			continue
+		}
+		fmt.Printf("Added: %s\n", item.Title)
 	}
 	fmt.Println("==============================================================")
 
@@ -65,4 +88,28 @@ func getCurrentTimeToSQLNullTime() sql.NullTime {
 		Time:  currentTime,
 		Valid: true,
 	}
+}
+
+func parseTimeString(str string) time.Time {
+	timeString := str[5:]
+
+	contains_plus := strings.Contains(timeString, "+")
+	if contains_plus {
+		timeValue, err := time.Parse("02 Jan 2006 15:04:05 Z0700", timeString)
+		if err != nil {
+			log.Fatalf("error parsing time value")
+		}
+		return timeValue
+	}
+
+	contains_gmt := strings.Contains(timeString, "GMT")
+	if contains_gmt {
+		timeValue, err := time.Parse("02 Jan 2006 15:04:05 MST", timeString)
+		if err != nil {
+			log.Fatalf("error parsing time value")
+		}
+		return timeValue
+	}
+
+	return time.Time{}
 }
