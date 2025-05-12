@@ -4,9 +4,11 @@
 
 Users can add and follow as many feeds as they like. **gator** then collects and stores posts from these feed in a PostgreSQL database. Users are then able to view summaries in the command line and access the full post via the provided URL. 
 
-**gator** requires Postgres and Go
-
 ## Install
+
+**gator** requires Go and Postgres
+
+Make sure you have the latest [Go toolchain](https://golang.org/dl/) installed as well as a local Postgres database.
 
 **gator** can be installed as a CLI command using 
 
